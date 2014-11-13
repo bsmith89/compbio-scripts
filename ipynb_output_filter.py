@@ -24,6 +24,7 @@ from IPython.nbformat.current import read, write
 
 json_in = read(sys.stdin, 'json')
 
+json_in.metadata.pop("signature")
 for sheet in json_in.worksheets:
     for cell in sheet.cells:
         if "outputs" in cell:
