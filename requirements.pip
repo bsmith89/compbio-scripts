@@ -1,1 +1,1 @@
-ipython [nbconvert]
+ipython[nbconvert]>=2.3
