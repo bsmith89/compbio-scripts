@@ -22,14 +22,19 @@ changing the content of the staging area.
 import sys
 from IPython.nbformat.current import read, write
 
-json_in = read(sys.stdin, 'json')
+def clean(in_handle, out_handle):
+    json_in = read(in_handle, 'json')
 
-json_in.metadata.pop("signature")
-for sheet in json_in.worksheets:
-    for cell in sheet.cells:
-        if "outputs" in cell:
-            cell.outputs = []
-        if "prompt_number" in cell:
-            cell.pop("prompt_number")
+    json_in.metadata.pop("signature")
+    for sheet in json_in.worksheets:
+        for cell in sheet.cells:
+            if "outputs" in cell:
+                cell.outputs = []
+            if "prompt_number" in cell:
+                cell.pop("prompt_number")
 
-write(json_in, sys.stdout, 'json')
+    write(json_in, out_handle, 'json')
+
+
+if __name__ == '__main__':
+    clean(sys.stdin, sys.stdout)
