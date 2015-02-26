@@ -25,7 +25,8 @@ from IPython.nbformat.current import read, write
 def clean(in_handle, out_handle):
     json_in = read(in_handle, 'json')
 
-    json_in.metadata.pop("signature")
+    if "signature" in json_in.metadata:
+        json_in.metadata.pop("signature")
     for sheet in json_in.worksheets:
         for cell in sheet.cells:
             if "outputs" in cell:
