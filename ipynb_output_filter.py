@@ -20,10 +20,10 @@ changing the content of the staging area.
 """
 
 import sys
-from IPython.nbformat.current import read, write
+from IPython.nbformat import read, write, NO_CONVERT
 
 def clean(in_handle, out_handle):
-    json_in = read(in_handle, 'json')
+    json_in = read(in_handle, NO_CONVERT)
 
     if "signature" in json_in.metadata:
         json_in.metadata.pop("signature")
@@ -34,7 +34,7 @@ def clean(in_handle, out_handle):
             if "prompt_number" in cell:
                 cell.pop("prompt_number")
 
-    write(json_in, out_handle, 'json')
+    write(json_in, out_handle, NO_CONVERT)
 
 
 if __name__ == '__main__':
