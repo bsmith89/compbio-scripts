@@ -9,9 +9,6 @@ import argparse
 from cli import get_default_parser
 import logging
 
-DEFAULT_INFILE_FMT = 'fasta'
-DEFAULT_OUTFILE_FMT = 'fasta'
-
 def order_recs(ordered_recs, recs_map):
     for rec in ordered_recs:
         yield recs_map[rec.id]

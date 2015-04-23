@@ -10,9 +10,6 @@ import argparse
 from cli import get_default_parser
 import logging
 
-DEFAULT_INFILE_FMT = 'fasta'
-DEFAULT_OUTFILE_FMT = 'fasta'
-
 def get_recs(recs, get_ids):
     for rec in recs:
         if rec.id in get_ids:
