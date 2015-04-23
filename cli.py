@@ -18,16 +18,19 @@ def get_default_parser():
 
     """
     p = argparse.ArgumentParser(add_help=False)
-    p.add_argument("--in-fmt", "-f", dest='fmt_infile', nargs=1, type=str,
+    p.add_argument("-f", "--in-fmt", dest='fmt_infile', nargs=1, type=str,
                    metavar="FORMAT", default=DEFAULT_SEQ_FMT,
                    choices=AVAIL_SEQ_FMTS,
                    help=("file format of infile or stdin"
                          " DEFAULT: {}").format(DEFAULT_SEQ_FMT))
-    p.add_argument("--out-fmt", "-t", dest='fmt_outfile', nargs=1, type=str,
+    p.add_argument("-t", "--out-fmt", dest='fmt_outfile', nargs=1, type=str,
                    metavar="FORMAT", default=DEFAULT_SEQ_FMT,
                    choices=AVAIL_SEQ_FMTS,
                    help=("file format of outfile or stdout"
                          " DEFAULT: {}").format(DEFAULT_SEQ_FMT))
+    p.add_argument("-v", "--verbose",
+                   dest='log_level', action='store_const', const=10,
+                   help=("set loggin level to 10 (debug)"))
     p.add_argument("--log-level", type=int,
                    default=DEFAULT_LOG_LVL,
                    help=("logging level (higher=fewer messages)"
