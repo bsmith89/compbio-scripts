@@ -5,9 +5,8 @@ from Bio.SeqIO import parse, write
 import sys
 import argparse
 from copy import copy
-
-DEFAULT_INFILE_FMT = 'fasta'
-DEFAULT_OUTFILE_FMT = 'fasta'
+from cli import get_default_parser
+import logging
 
 def translate_recs(records):
     """Translate sequence from records.
@@ -25,24 +24,15 @@ def translate_recs(records):
         yield rec
 
 def main():
-    p = argparse.ArgumentParser(description=__doc__)
-    # Arguments which may be generalizable to many scripts.
-    # TODO: Break these out into a module which can be imported.
-    p.add_argument("--in-fmt", "-f", dest='fmt_infile', nargs=1, type=str,
-                   metavar="FORMAT", default=DEFAULT_INFILE_FMT,
-                   help="file format of infile or stdin")
-    p.add_argument("--out-fmt", "-t", dest='fmt_outfile', nargs=1, type=str,
-                   metavar="FORMAT", default=DEFAULT_OUTFILE_FMT,
-                   help="file format of outfile or stdout")
-    p.add_argument("--verbose", "-v", action='count',
-                   help="increase verbosity")
-
-    # Arguments specific to this script.
+    p = argparse.ArgumentParser(description=__doc__,
+                                parents=[get_default_parser()])
     p.add_argument('in_handles', nargs='*', type=argparse.FileType('r'),
                    metavar="INFILE",
                    default=[sys.stdin])
 
     args = p.parse_args()
+    logging.basicConfig(level=args.log_level)
+    logging.debug(args)
 
     for handle in args.in_handles:
         for trans_rec in translate_recs(parse(handle, args.fmt_infile)):

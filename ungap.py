@@ -5,6 +5,8 @@ from Bio.SeqIO import parse, write
 import sys
 import argparse
 from copy import copy
+from cli import get_default_parser
+import logging
 
 def ungap_recs(records):
     """Ungap sequence in records.
@@ -21,23 +23,15 @@ def ungap_recs(records):
 
 
 def main():
-    p = argparse.ArgumentParser(description=__doc__)
-    # Arguments which may be generalizable to many scripts.
-    p.add_argument("--in-fmt", "-f", dest='fmt_infile', nargs=1, type=str,
-                   metavar="FORMAT", default='fasta',
-                   help="file format of infile or stdin")
-    p.add_argument("--out-fmt", "-t", dest='fmt_outfile', nargs=1, type=str,
-                   metavar="FORMAT", default='fasta',
-                   help="file format of outfile or stdout")
-    p.add_argument("--verbose", "-v", action='count',
-                   help="increase verbosity")
-
-    # Arguments specific to this script.
+    p = argparse.ArgumentParser(description=__doc__,
+                                parents=[get_default_parser()])
     p.add_argument('in_handles', nargs='*', type=argparse.FileType('r'),
                    metavar="INFILE",
                    default=[sys.stdin])
 
     args = p.parse_args()
+    logging.basicConfig(level=args.log_level)
+    logging.debug(args)
 
     for handle in args.in_handles:
         for rec in ungap_recs(parse(handle, args.fmt_infile)):
