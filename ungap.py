@@ -22,7 +22,6 @@ def ungap_recs(records):
         rec.seq = rec.seq.ungap(".")
         yield rec
 
-
 def main():
     p = argparse.ArgumentParser(description=__doc__,
                                 parents=[get_default_parser()])

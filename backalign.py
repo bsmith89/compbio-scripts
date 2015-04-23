@@ -2,8 +2,8 @@
 """Align codons based on a corresponding amino-acid sequence.
 
 Not defensive in the slightest:
-    Doesn't check that codons and AAs match
-    Doesn't check that sequence labels match (see "match_order.py")
+    Doesn't check that codons and AAs match.
+    Doesn't check that sequence labels match (see "match_order.py").
 
 """
 
