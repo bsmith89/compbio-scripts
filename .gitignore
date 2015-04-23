@@ -4,3 +4,4 @@
 *.pyc
 *.html
 tags
+.tests_local/
