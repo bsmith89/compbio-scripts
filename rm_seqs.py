@@ -8,7 +8,8 @@ from Bio.SeqIO import parse, write
 import sys
 import argparse
 from cli import get_default_parser
-import logging
+from logging import getLogger
+
 
 def rm_recs(recs, rm_ids):
     for rec in recs:
@@ -32,8 +33,10 @@ def main():
                    metavar="SEQFILE", default=sys.stdin)
 
     args = p.parse_args()
-    logging.basicConfig(level=args.log_level)
-    logging.debug(args)
+
+    l = getLogger(__name__)
+    l.setLevel(args.log_level)
+    l.info(args)
 
     for rec in rm_recs(parse(args.in_handle, args.fmt_infile),
                        get_list(args.rm_handle)):

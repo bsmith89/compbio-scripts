@@ -13,7 +13,8 @@ import sys
 import argparse
 from cli import get_default_parser
 from copy import copy
-import logging
+from logging import getLogger
+
 
 def codons(sequence):
     """Return groups of 3 items from a sequence.
@@ -56,8 +57,10 @@ def main():
                    default=sys.stdin)
 
     args = p.parse_args()
-    logging.basicConfig(level=args.log_level)
-    logging.debug(args)
+
+    l = getLogger(__name__)
+    l.setLevel(args.log_level)
+    l.info(args)
 
     for rec in backalign_recs(parse(args.in_nucl, args.fmt_infile),
                               parse(args.in_prot, args.fmt_infile)):

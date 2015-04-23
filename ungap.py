@@ -6,7 +6,8 @@ import sys
 import argparse
 from copy import copy
 from cli import get_default_parser
-import logging
+from logging import getLogger
+
 
 def ungap_recs(records):
     """Ungap sequence in records.
@@ -30,8 +31,10 @@ def main():
                    default=[sys.stdin])
 
     args = p.parse_args()
-    logging.basicConfig(level=args.log_level)
-    logging.debug(args)
+
+    l = getLogger(__name__)
+    l.setLevel(args.log_level)
+    l.info(args)
 
     for handle in args.in_handles:
         for rec in ungap_recs(parse(handle, args.fmt_infile)):
