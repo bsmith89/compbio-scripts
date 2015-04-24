@@ -6,7 +6,7 @@ import sys
 import argparse
 from copy import copy
 from cli import get_default_parser
-from logging import getLogger
+import logging
 
 
 def ungap_recs(records):
@@ -31,9 +31,9 @@ def main():
 
     args = p.parse_args()
 
-    l = getLogger(__name__)
-    l.setLevel(args.log_level)
-    l.info(args)
+    logger = logging.getLogger(__name__)
+    logging.basicConfig(level=args.log_level)
+    logger.debug(args)
 
     for handle in args.in_handles:
         for rec in ungap_recs(parse(handle, args.fmt_infile)):

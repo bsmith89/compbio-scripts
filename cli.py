@@ -28,13 +28,13 @@ def get_default_parser():
                    choices=AVAIL_SEQ_FMTS,
                    help=("file format of outfile or stdout"
                          " DEFAULT: {}").format(DEFAULT_SEQ_FMT))
-    p.add_argument("-v", "--verbose",
-                   dest='log_level', action='store_const', const=10,
-                   help=("set loggin level to 10 (debug)"))
     p.add_argument("--log-level", type=int,
                    default=DEFAULT_LOG_LVL,
                    help=("logging level (higher=fewer messages)"
                          " DEFAULT: {}").format(DEFAULT_LOG_LVL))
+    p.add_argument("-v", "--verbose",
+                   dest='log_level', action='store_const', const=10,
+                   help=("set loggin level to 10 (debug)"))
     return p
 
 if __name__ == "__main__":

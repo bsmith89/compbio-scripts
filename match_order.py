@@ -7,7 +7,7 @@ from Bio.SeqIO import parse, index, write
 import sys
 import argparse
 from cli import get_default_parser
-from logging import getLogger
+import logging
 
 
 def order_recs(ordered_recs, recs_map):
@@ -24,9 +24,9 @@ def main():
 
     args = p.parse_args()
 
-    l = getLogger(__name__)
-    l.setLevel(args.log_level)
-    l.info(args)
+    logger = logging.getLogger(__name__)
+    logging.basicConfig(level=args.log_level)
+    logger.debug(args)
 
     for rec in order_recs(parse(args.ord_handle, args.fmt_infile),
                           index(args.match_path, args.fmt_infile)):

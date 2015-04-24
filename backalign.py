@@ -13,7 +13,7 @@ import sys
 import argparse
 from cli import get_default_parser
 from copy import copy
-from logging import getLogger
+import logging
 
 
 def codons(sequence):
@@ -58,9 +58,9 @@ def main():
 
     args = p.parse_args()
 
-    l = getLogger(__name__)
-    l.setLevel(args.log_level)
-    l.info(args)
+    logger = logging.getLogger(__name__)
+    logging.basicConfig(level=args.log_level)
+    logger.debug(args)
 
     for rec in backalign_recs(parse(args.in_nucl, args.fmt_infile),
                               parse(args.in_prot, args.fmt_infile)):
