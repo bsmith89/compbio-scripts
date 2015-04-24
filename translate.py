@@ -5,7 +5,7 @@ from Bio.SeqIO import parse, write
 import sys
 import argparse
 from copy import copy
-from cli import get_default_parser
+import cli
 import logging
 
 def translate_recs(records):
@@ -25,20 +25,16 @@ def translate_recs(records):
 
 def main():
     p = argparse.ArgumentParser(description=__doc__,
-                                parents=[get_default_parser()])
-    p.add_argument('in_handles', nargs='*', type=argparse.FileType('r'),
-                   metavar="INFILE",
-                   default=[sys.stdin])
-
+                                parents=[cli.get_default_parser(),
+                                         cli.get_infile_parser()])
     args = p.parse_args()
 
     logger = logging.getLogger(__name__)
     logging.basicConfig(level=args.log_level)
     logger.debug(args)
 
-    for handle in args.in_handles:
-        for trans_rec in translate_recs(parse(handle, args.fmt_infile)):
-            write(trans_rec, sys.stdout, args.fmt_outfile)
+    for trans_rec in translate_recs(parse(args.in_handle, args.fmt_infile)):
+        write(trans_rec, args.out_handle, args.fmt_outfile)
 
 if __name__ == '__main__':
     main()

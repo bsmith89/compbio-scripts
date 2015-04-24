@@ -11,9 +11,14 @@ from Bio.SeqIO import parse, write
 from Bio.Seq import Seq
 import sys
 import argparse
-from cli import get_default_parser
+import cli
 from copy import copy
 import logging
+
+
+AVAIL_ALIGN_FMTS = ['clustal', 'emboss', 'fasta', 'nexus', 'phylip',
+                    'phylip-sequential', 'phylip-relaxed', 'stockholm']
+DEFAULT_ALIGN_FMT = 'fasta'
 
 
 def codons(sequence):
@@ -49,12 +54,20 @@ def backalign_recs(nucl_recs, prot_recs):
 
 def main():
     p = argparse.ArgumentParser(description=__doc__,
-                                parents=[get_default_parser()])
-    p.add_argument('in_prot', type=argparse.FileType('r'),
-                   metavar="PROT-FILE")
-    p.add_argument('in_nucl', nargs='?', type=argparse.FileType('r'),
-                   metavar="NUCL-FILE",
-                   default=sys.stdin)
+                                parents=[cli.get_default_parser(),
+                                         cli.get_infile_parser()])
+    p.add_argument('align_handle', type=argparse.FileType('r'),
+                   metavar="ALIGNMENT",
+                   help=("aligned protein sequences"))
+    p.add_argument('--align-fmt', dest='fmt_align', nargs=1, type=str,
+                   metavar="FORMAT", default=DEFAULT_ALIGN_FMT,
+                   choices=AVAIL_ALIGN_FMTS,
+                   help=("file format of aligned protein sequences"
+                         " DEFAULT: {}").format(DEFAULT_ALIGN_FMT))
+
+    # TODO: This makes use of private variables, and is therefore dangerous.
+    action_dict = {action.dest: action for action in p._actions}
+    action_dict['in_handle'].help = "unaligned nucleotide sequences"
 
     args = p.parse_args()
 
@@ -62,9 +75,9 @@ def main():
     logging.basicConfig(level=args.log_level)
     logger.debug(args)
 
-    for rec in backalign_recs(parse(args.in_nucl, args.fmt_infile),
-                              parse(args.in_prot, args.fmt_infile)):
-        write(rec, sys.stdout, args.fmt_outfile)
+    for rec in backalign_recs(parse(args.in_handle, args.fmt_infile),
+                              parse(args.align_handle, args.fmt_align)):
+        write(rec, args.out_handle, args.fmt_outfile)
 
 if __name__ == '__main__':
     main()
