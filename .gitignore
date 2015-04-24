@@ -4,4 +4,4 @@
 *.pyc
 *.html
 tags
-.tests_local/
+__pycache__/
