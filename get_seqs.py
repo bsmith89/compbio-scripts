@@ -19,11 +19,24 @@ def get_recs(recs, get_ids):
         else:
             continue
 
+def get_rec_list(recs, get_ids):
+    map = {rec.id: rec for rec in recs}
+    return [map[id] for id in get_ids]
+
 def get_list(handle):
     out = []
     for line in handle:
         out.append(line.strip())
     return out
+
+def _get_extra_args():
+    p = argparse.ArgumentParser(add_help=False)
+    g = p.add_argument_group(*cli.FMT_GROUP)
+    g.add_argument("-m", "--match-order", action='store_true',
+                   help="output in the same order as LIST")
+    return p
+
+
 
 def parse_args(argv):
     parser = argparse.ArgumentParser(description=__doc__,
@@ -31,6 +44,7 @@ def parse_args(argv):
                                               cli.get_seq_out_parser(),
                                               cli.get_list_in_parser(),
                                               cli.get_seq_in_parser(),
+                                              _get_extra_args(),
                                               ])
     args = parser.parse_args(argv)
     return args
@@ -40,9 +54,14 @@ def main():
     logging.basicConfig(level=args.log_level)
     logger.debug(args)
 
-    for rec in get_recs(parse(args.in_handle, args.fmt_infile),
-                        get_list(args.list_handle)):
-        write(rec, args.out_handle, args.fmt_outfile)
+    if args.match_order:
+        for rec in get_recs(parse(args.in_handle, args.fmt_infile),
+                            get_list(args.list_handle)):
+            write(rec, args.out_handle, args.fmt_outfile)
+    else:
+        recs = get_rec_list(parse(args.in_handle, args.fmt_infile),
+                            get_list(args.list_handle))
+        write(recs, args.out_handle, args.fmt_outfile)
 
 if __name__ == '__main__':
     main()
