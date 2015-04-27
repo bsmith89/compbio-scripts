@@ -1,15 +1,20 @@
 """Common command-line interface elements for sequence analysis utilities.
 
 """
+# TODO: Consider adding a -V flag
+# See the 'version' action:
+# <https://docs.python.org/3/library/argparse.html#action>
 
 import argparse
 import sys
 import logging
 
 
-INPUT_GROUP = "input arguments", "format and origin"
-OUTPUT_GROUP = "output arguments", "format and destination"
-LOG_GROUP = "logging arguments", "verbosity and debugging"
+# <GROUP> = "<name>", "<description>"
+LOG_GROUP = "logging options", ""
+POS_GROUP = "positional arguments", ""
+FMT_GROUP = "format options", ""
+
 
 # TODO: Provide more options here.  Presumably anything available in Biopython.
 AVAIL_SEQ_FMTS = ['fasta', 'fastq', 'genbank', 'sff', 'swiss', 'tab']
@@ -21,6 +26,8 @@ DEFAULT_ALIGN_FMT = 'fasta'
 
 DEFAULT_LOG_LVL = 30
 
+logger = logging.getLogger(__name__)
+
 def get_base_parser():
     p = argparse.ArgumentParser(add_help=False)
     g = p.add_argument_group(*LOG_GROUP)
@@ -31,10 +38,7 @@ def get_base_parser():
     g.add_argument("-v", "--verbose",
                    dest='log_level', action='store_const', const=10,
                    help=("set loggin level to 10 (debug)"))
-    g.add_argument("-V", "--version", dest='show_version',
-                   action='store_true',
-                   help=("show version information and exit"))
-    h = p.add_argument_group(*OUTPUT_GROUP)
+    h = p.add_argument_group(*FMT_GROUP)
     h.add_argument("-o", "--out-file", dest='out_handle',
                    type=argparse.FileType('w'),
                    metavar="OUTFILE", default=sys.stdout,
@@ -48,12 +52,13 @@ def get_seq_in_parser(optional=True):
         in_handle_nargs = None
 
     p = argparse.ArgumentParser(add_help=False)
-    g = p.add_argument_group(*INPUT_GROUP)
+    g = p.add_argument_group(*POS_GROUP)
     g.add_argument("in_handle", nargs=in_handle_nargs,
                    type=argparse.FileType('r'),
                    metavar="SEQUENCE", default=sys.stdin,
                    help=("sequence file"))
-    g.add_argument("-f", "--in-fmt", dest='fmt_infile', nargs=1, type=str,
+    h = p.add_argument_group(*FMT_GROUP)
+    h.add_argument("-f", "--in-fmt", dest='fmt_infile', nargs=1, type=str,
                    metavar="FORMAT", default=DEFAULT_SEQ_FMT,
                    choices=AVAIL_SEQ_FMTS,
                    help=("sequence file format of input"
@@ -63,7 +68,7 @@ def get_seq_in_parser(optional=True):
 
 def get_seq_out_parser():
     p = argparse.ArgumentParser(add_help=False)
-    g = p.add_argument_group(*OUTPUT_GROUP)
+    g = p.add_argument_group(*FMT_GROUP)
     g.add_argument("-t", "--out-fmt", dest='fmt_outfile', nargs=1, type=str,
                    metavar="FORMAT", default=DEFAULT_SEQ_FMT,
                    choices=AVAIL_SEQ_FMTS,
@@ -78,12 +83,13 @@ def get_align_in_parser(optional=False):
         in_handle_nargs = None
 
     p = argparse.ArgumentParser(add_help=False)
-    g = p.add_argument_group(*INPUT_GROUP)
+    g = p.add_argument_group(*POS_GROUP)
     g.add_argument('align_handle', nargs=in_handle_nargs,
                    type=argparse.FileType('r'),
                    metavar="ALIGNMENT",
                    help=("alignment file"))
-    g.add_argument('--align-fmt', dest='fmt_align', nargs=1, type=str,
+    h = p.add_argument_group(*FMT_GROUP)
+    h.add_argument('--align-fmt', dest='fmt_align', nargs=1, type=str,
                    metavar="FORMAT", default=DEFAULT_ALIGN_FMT,
                    choices=AVAIL_ALIGN_FMTS,
                    help=("file format of aligned protein sequences"
@@ -92,7 +98,7 @@ def get_align_in_parser(optional=False):
 
 def get_list_in_parser():
     p = argparse.ArgumentParser(add_help=False)
-    g = p.add_argument_group(*INPUT_GROUP)
+    g = p.add_argument_group(*POS_GROUP)
     g.add_argument('list_handle', help="list of sequence IDs",
                    metavar='LIST', type=argparse.FileType('r'))
     return p
@@ -100,9 +106,11 @@ def get_list_in_parser():
 def parse_args(argv):
     parser = argparse.ArgumentParser(description="Test parser.",
                                      parents=[get_base_parser(),
-                                              get_seq_in_parser(),
                                               get_align_in_parser(),
-                                              get_seq_out_parser()])
+                                              get_seq_out_parser(),
+                                              get_list_in_parser(),
+                                              get_seq_in_parser(),
+                                              ])
     args = parser.parse_args(argv)
 
     logger = logging.getLogger(__name__)

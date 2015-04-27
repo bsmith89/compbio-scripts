@@ -21,12 +21,13 @@ def order_recs(ordered_recs, recs_map):
 
 def match_order_parser():
     p = argparse.ArgumentParser(add_help=False)
-    g = p.add_argument_group(*cli.INPUT_GROUP)
+    g = p.add_argument_group(*cli.POS_GROUP)
     g.add_argument("match_path", type=str, metavar="SEQUENCES",
                    help="sequence file")
     g.add_argument("ord_handle", nargs='?', type=argparse.FileType('r'),
                    metavar="ORDER", default=sys.stdin,
                    help="ordered sequences")
+    h = p.add_argument_group(*cli)
     g.add_argument("-f", "--in-fmt", dest='fmt_infile', nargs=1, type=str,
                    metavar="FORMAT", default=cli.DEFAULT_SEQ_FMT,
                    choices=cli.AVAIL_SEQ_FMTS,
