@@ -8,6 +8,7 @@ from copy import copy
 import cli
 import logging
 
+logger = logging.getLogger(__name__)
 
 def ungap_recs(records):
     """Ungap sequence in records.
@@ -22,20 +23,22 @@ def ungap_recs(records):
         rec.seq = rec.seq.ungap(".")
         yield rec
 
+def parse_args(argv):
+    parser = argparse.ArgumentParser(description=__doc__,
+                                     parents=[cli.get_base_parser(),
+                                              cli.get_seq_out_parser(),
+                                              cli.get_seq_in_parser(),
+                                              ])
+    args = parser.parse_args(argv)
+    return args
+
 def main():
-    p = argparse.ArgumentParser(description=__doc__,
-                                parents=[cli.get_default_parser(),
-                                         cli.get_infile_parser()])
-
-    args = p.parse_args()
-
-    logger = logging.getLogger(__name__)
+    args = parse_args(sys.argv[1:])
     logging.basicConfig(level=args.log_level)
     logger.debug(args)
 
-    for handle in args.in_handles:
-        for rec in ungap_recs(parse(handle, args.fmt_infile)):
-            write(trans_rec, args.out_handle, args.fmt_outfile)
+    for rec in ungap_recs(parse(args.in_handle, args.fmt_infile)):
+        write(rec, args.out_handle, args.fmt_outfile)
 
 if __name__ == '__main__':
     main()

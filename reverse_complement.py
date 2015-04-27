@@ -8,6 +8,8 @@ from copy import copy
 import cli
 import logging
 
+logger = logging.getLogger(__name__)
+
 def revcompl_recs(records):
     """Reverse complement sequence from records.
 
@@ -23,13 +25,17 @@ def revcompl_recs(records):
         rec.seq = rec.seq.reverse_complement()
         yield rec
 
-def main():
-    p = argparse.ArgumentParser(description=__doc__,
-                                parents=[cli.get_default_parser(),
-                                         cli.get_infile_parser()])
-    args = p.parse_args()
+def parse_args(argv):
+    parser = argparse.ArgumentParser(description=__doc__,
+                                     parents=[cli.get_base_parser(),
+                                              cli.get_seq_out_parser(),
+                                              cli.get_seq_in_parser(),
+                                              ])
+    args = parser.parse_args(argv)
+    return args
 
-    logger = logging.getLogger(__name__)
+def main():
+    args = parse_args(sys.argv[1:])
     logging.basicConfig(level=args.log_level)
     logger.debug(args)
 

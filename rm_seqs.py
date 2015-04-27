@@ -10,6 +10,7 @@ import argparse
 import cli
 import logging
 
+logger = logging.getLogger(__name__)
 
 def rm_recs(recs, rm_ids):
     for rec in recs:
@@ -24,21 +25,23 @@ def get_list(handle):
         out.append(line.strip())
     return out
 
+def parse_args(argv):
+    parser = argparse.ArgumentParser(description=__doc__,
+                                     parents=[cli.get_base_parser(),
+                                              cli.get_seq_out_parser(),
+                                              cli.get_list_in_parser(),
+                                              cli.get_seq_in_parser(),
+                                              ])
+    args = parser.parse_args(argv)
+    return args
+
 def main():
-    p = argparse.ArgumentParser(description=__doc__,
-                                parents=[cli.get_default_parser(),
-                                         cli.get_infile_parser()])
-    p.add_argument('rm_handle', type=argparse.FileType('r'),
-                   metavar="LISTFILE", help=("list of sequences"))
-
-    args = p.parse_args()
-
-    logger = logging.getLogger(__name__)
+    args = parse_args(sys.argv[1:])
     logging.basicConfig(level=args.log_level)
     logger.debug(args)
 
     for rec in rm_recs(parse(args.in_handle, args.fmt_infile),
-                       get_list(args.rm_handle)):
+                       get_list(args.list_handle)):
         write(rec, args.out_handle, args.fmt_outfile)
 
 if __name__ == '__main__':
