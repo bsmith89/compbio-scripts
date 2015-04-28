@@ -46,11 +46,11 @@ def parse_args(argv):
                                               cli.get_seq_in_parser(),
                                               _get_extra_args(),
                                               ])
-    args = parser.parse_args(argv)
+    args = parser.parse_args(argv[1:])
     return args
 
 def main():
-    args = parse_args(sys.argv[1:])
+    args = parse_args(sys.argv)
     logging.basicConfig(level=args.log_level)
     logger.debug(args)
 

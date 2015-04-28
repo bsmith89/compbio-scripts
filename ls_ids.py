@@ -15,12 +15,12 @@ def get_ids(recs):
     for rec in recs:
         yield rec.id
 
-def parse_args(argv):
+def parse_args(argv[1:]):
     parser = argparse.ArgumentParser(description=__doc__,
                                      parents=[cli.get_base_parser(),
                                               cli.get_seq_in_parser(),
                                               ])
-    args = parser.parse_args(argv[1:])
+    args = parser.parse_args(argv)
     return args
 
 def main():

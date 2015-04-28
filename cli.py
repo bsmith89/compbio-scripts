@@ -111,16 +111,14 @@ def parse_args(argv):
                                               get_list_in_parser(),
                                               get_seq_in_parser(),
                                               ])
-    args = parser.parse_args(argv)
-
-    logger = logging.getLogger(__name__)
-    logging.basicConfig(level=args.log_level)
-    logger.debug(args)
+    args = parser.parse_args(argv[1:])
 
     return args
 
 def main():
-    args = parse_args(sys.argv[1:])
+    args = parse_args(sys.argv)
+    logging.basicConfig(level=args.log_level)
+    logger.debug(args)
 
 if __name__ == "__main__":
     main()
