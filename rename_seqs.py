@@ -31,16 +31,17 @@ def get_map(handle):
 
 def get_map_in_parser():
     p = argparse.ArgumentParser(add_help=False)
-    g = p.add_argument_group(*POS_GROUP)
+    g = p.add_argument_group(*cli.POS_GROUP)
     g.add_argument('map_handle',
                    help="tab separated file mapping old to new IDs",
                    metavar='MAP', type=argparse.FileType('r'))
+    return p
 
 def parse_args(argv):
     parser = argparse.ArgumentParser(description=__doc__,
                                      parents=[cli.get_base_parser(),
                                               cli.get_seq_out_parser(),
-                                              cli.get_map_in_parser(),
+                                              get_map_in_parser(),
                                               cli.get_seq_in_parser(),
                                               ])
     args = parser.parse_args(argv[1:])
