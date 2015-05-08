@@ -58,7 +58,7 @@ def get_seq_in_parser(optional=True):
                    metavar="SEQUENCE", default=sys.stdin,
                    help=("sequence file"))
     h = p.add_argument_group(*FMT_GROUP)
-    h.add_argument("-f", "--in-fmt", dest='fmt_infile', nargs=1, type=str,
+    h.add_argument("-f", "--in-fmt", dest='fmt_infile', type=str,
                    metavar="FORMAT", default=DEFAULT_SEQ_FMT,
                    choices=AVAIL_SEQ_FMTS,
                    help=("sequence file format of input"
@@ -69,7 +69,7 @@ def get_seq_in_parser(optional=True):
 def get_seq_out_parser():
     p = argparse.ArgumentParser(add_help=False)
     g = p.add_argument_group(*FMT_GROUP)
-    g.add_argument("-t", "--out-fmt", dest='fmt_outfile', nargs=1, type=str,
+    g.add_argument("-t", "--out-fmt", dest='fmt_outfile', type=str,
                    metavar="FORMAT", default=DEFAULT_SEQ_FMT,
                    choices=AVAIL_SEQ_FMTS,
                    help=("sequence file format of output"
@@ -89,7 +89,7 @@ def get_align_in_parser(optional=False):
                    metavar="ALIGNMENT",
                    help=("alignment file"))
     h = p.add_argument_group(*FMT_GROUP)
-    h.add_argument('--align-fmt', dest='fmt_align', nargs=1, type=str,
+    h.add_argument('--align-fmt', dest='fmt_align', type=str,
                    metavar="FORMAT", default=DEFAULT_ALIGN_FMT,
                    choices=AVAIL_ALIGN_FMTS,
                    help=("file format of aligned protein sequences"
