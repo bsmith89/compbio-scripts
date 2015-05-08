@@ -14,6 +14,7 @@ import argparse
 import cli
 from copy import copy
 import logging
+from warnings import warn
 
 
 logger = logging.getLogger(__name__)
@@ -44,10 +45,17 @@ def backalign(nucl, prot):
             align_nucl += next(codon_iter)
     return Seq(align_nucl)
 
-def backalign_recs(nucl_recs, prot_recs):
-    for nucl_rec, prot_rec in zip(nucl_recs, prot_recs):
+def backalign_recs(nucl_recs, prot_index):
+    for nucl_rec in nucl_recs:
         out_rec = copy(nucl_rec)
-        out_rec.seq = backalign(nucl_rec.seq, prot_rec.seq)
+        try:
+            prot_rec = prot_index[nucl_rec.id]
+        except KeyError:
+            warn(("No alignment found for {}. "
+                  "Dropping.").format(nucl_rec.id))
+            continue
+        else:
+            out_rec.seq = backalign(nucl_rec.seq, prot_rec.seq)
         yield out_rec
 
 def parse_args(argv):
@@ -66,8 +74,11 @@ def main():
     logging.basicConfig(level=args.log_level)
     logger.debug(args)
 
+    align_index = {rec.id: rec
+                   for rec in parse(args.align_handle, args.fmt_align)}
+
     for rec in backalign_recs(parse(args.in_handle, args.fmt_infile),
-                              parse(args.align_handle, args.fmt_align)):
+                              align_index):
         write(rec, args.out_handle, args.fmt_outfile)
 
 if __name__ == '__main__':
