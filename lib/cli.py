@@ -14,7 +14,7 @@ import logging
 LOG_GROUP = "logging options", ""
 POS_GROUP = "positional arguments", ""
 FMT_GROUP = "format options", ""
-
+PAR_GROUP = "parameters", ""
 
 # TODO: Provide more options here.  Presumably anything available in Biopython.
 AVAIL_SEQ_FMTS = ['fasta', 'fastq', 'genbank', 'sff', 'swiss', 'tab']

@@ -7,7 +7,7 @@ renamed.
 from Bio.SeqIO import parse, write
 import sys
 import argparse
-import cli
+import lib.cli as cli
 import logging
 from copy import copy
 
@@ -17,9 +17,10 @@ def rename_recs(recs, name_map):
     for rec in recs:
         rec = copy(rec)
         if rec.id in name_map:
+            logger.debug("Renaming {} to {}.".format(rec.id, name_map[rec.id]))
             rec.id = name_map[rec.id]
-        rec.name = ""
-        rec.description = ""
+            rec.name = ""
+            rec.description = ""
         yield rec
 
 def get_map(handle):
@@ -54,6 +55,7 @@ def main():
 
     for rec in rename_recs(parse(args.in_handle, args.fmt_infile),
                            get_map(args.map_handle)):
+        logger.debug("Writing {}".format(rec.id))
         write(rec, args.out_handle, args.fmt_outfile)
 
 if __name__ == '__main__':

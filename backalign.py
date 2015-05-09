@@ -11,7 +11,7 @@ from Bio.SeqIO import parse, write
 from Bio.Seq import Seq
 import sys
 import argparse
-import cli
+import lib.cli as cli
 from copy import copy
 import logging
 from warnings import warn
@@ -51,8 +51,8 @@ def backalign_recs(nucl_recs, prot_index):
         try:
             prot_rec = prot_index[nucl_rec.id]
         except KeyError:
-            warn(("No alignment found for {}. "
-                  "Dropping.").format(nucl_rec.id))
+            logger.warn(("No alignment found for {}. "
+                         "Dropping.").format(nucl_rec.id))
             continue
         else:
             out_rec.seq = backalign(nucl_rec.seq, prot_rec.seq)

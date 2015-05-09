@@ -7,14 +7,18 @@ without any of the former.
 from Bio.SeqIO import parse, write
 import sys
 import argparse
-import cli
+import lib.cli as cli
 import logging
 
 logger = logging.getLogger(__name__)
 
 def rm_recs(recs, rm_ids):
+    recs = list(recs)
+    logger.debug("Dropping {}\n".format(rm_ids))
+    logger.debug("{} sequences in file.".format(len(recs)))
     for rec in recs:
         if rec.id in rm_ids:
+            logger.debug("Dropping {}\n".format(rec.id))
             continue
         else:
             yield rec
@@ -40,7 +44,10 @@ def main():
     logging.basicConfig(level=args.log_level)
     logger.debug(args)
 
-    for rec in rm_recs(parse(args.in_handle, args.fmt_infile),
+    recs = list(parse(args.in_handle, args.fmt_infile))
+    assert len(recs) > 0
+
+    for rec in rm_recs(recs,
                        get_list(args.list_handle)):
         write(rec, args.out_handle, args.fmt_outfile)
 

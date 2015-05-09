@@ -7,7 +7,7 @@ from a FASTA file.
 from Bio.SeqIO import parse, write
 import sys
 import argparse
-import cli
+import lib.cli as cli
 import logging
 
 logger = logging.getLogger(__name__)
