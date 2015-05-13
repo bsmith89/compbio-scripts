@@ -17,6 +17,7 @@ from Bio.codonalign import build as build_codon_alignment
 import lib.cli as cli
 
 logger = logging.getLogger(__name__)
+logging.captureWarnings(True)
 
 def parse_args(argv):
     parser = argparse.ArgumentParser(description=__doc__,

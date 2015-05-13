@@ -11,6 +11,7 @@ import lib.cli as cli
 import logging
 
 logger = logging.getLogger(__name__)
+logging.captureWarnings(True)
 
 def rm_recs(recs, rm_ids):
     recs = list(recs)

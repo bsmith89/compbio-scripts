@@ -9,6 +9,7 @@ import lib.cli as cli
 import logging
 
 logger = logging.getLogger(__name__)
+logging.captureWarnings(True)
 
 def revcompl_recs(records):
     """Reverse complement sequence from records.

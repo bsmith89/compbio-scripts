@@ -9,6 +9,7 @@ import lib.cli as cli
 import logging
 
 logger = logging.getLogger(__name__)
+logging.captureWarnings(True)
 
 def ungap_recs(records):
     """Ungap sequence in records.

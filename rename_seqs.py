@@ -12,6 +12,7 @@ import logging
 from copy import copy
 
 logger = logging.getLogger(__name__)
+logging.captureWarnings(True)
 
 def rename_recs(recs, name_map):
     for rec in recs:

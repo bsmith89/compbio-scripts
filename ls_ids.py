@@ -10,6 +10,7 @@ import lib.cli as cli
 import logging
 
 logger = logging.getLogger(__name__)
+logging.captureWarnings(True)
 
 def get_ids(recs):
     for rec in recs:

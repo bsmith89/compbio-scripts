@@ -9,6 +9,7 @@ import lib.cli as cli
 import logging
 
 logger = logging.getLogger(__name__)
+logging.captureWarnings(True)
 
 def translate_recs(records):
     """Translate sequence from records.
