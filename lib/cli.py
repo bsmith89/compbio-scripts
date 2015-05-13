@@ -28,6 +28,9 @@ DEFAULT_LOG_LVL = 30
 
 logger = logging.getLogger(__name__)
 
+class DropSequenceWarning(RuntimeWarning):
+    pass
+
 def get_base_parser():
     p = argparse.ArgumentParser(add_help=False)
     g = p.add_argument_group(*LOG_GROUP)
