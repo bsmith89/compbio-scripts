@@ -27,15 +27,21 @@ def clean(in_handle, out_handle):
 
     if "signature" in json_in.metadata:
         json_in.metadata.pop("signature")
-    for sheet in json_in.worksheets:
-        for cell in sheet.cells:
-            if "outputs" in cell:
-                cell.outputs = []
-            if "prompt_number" in cell:
-                cell.pop("prompt_number")
+    for cell in json_in.cells:
+        if "outputs" in cell:
+            cell.outputs = []
+        if "prompt_number" in cell:
+            cell.pop("prompt_number")
 
     write(json_in, out_handle, NO_CONVERT)
 
 
 if __name__ == '__main__':
-    clean(sys.stdin, sys.stdout)
+    args = sys.argv[1:]
+    if len(args) == 0:
+        clean(sys.stdin, sys.stdout)
+    elif len(args) == 1:
+        with open(args[0]) as handle:
+            clean(handle, sys.stdout)
+    else:
+        raise ValueError("Too many CL arguments passed to program.")
