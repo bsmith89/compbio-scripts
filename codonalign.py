@@ -1,14 +1,11 @@
 #!/usr/bin/env python3
 """Align codons based on a corresponding amino-acid sequence.
 
-Not defensive in the slightest:
-    Doesn't check that codons and AAs match.
-    Doesn't check that sequence labels match (see "match_order.py").
-
 """
 
 from Bio.SeqIO import parse, write
 from Bio.Seq import Seq
+from Bio.Alphabet import generic_dna, generic_protein, Gapped
 import sys
 import argparse
 import lib.cli as cli
@@ -19,6 +16,10 @@ from warnings import warn
 
 logger = logging.getLogger(__name__)
 
+
+class MismatchedSeqsError(Exception):
+    """Attempted to align codons between mismatched sequences."""
+    pass
 
 def codons(sequence):
     """Return groups of 3 items from a sequence.
@@ -32,18 +33,22 @@ def codons(sequence):
             codon = ""
 
 def backalign(nucl, prot):
-    align_nucl = ""
+    align_nucl = []
     codon_iter = codons(nucl)
+    prot.alphabet = Gapped(generic_protein)
     for amino in prot:
         if amino == ".":
-            continue
-        elif amino.islower():
-            next(codon_iter)
+            align_nucl += ["..."]
+        elif amino.islower() or amino == '*':
+            align_nucl += next(codon_iter).lower()
         elif amino == "-":
-            align_nucl += "---"
+            align_nucl += ["---"]
         else:
-            align_nucl += next(codon_iter)
-    return Seq(align_nucl)
+            align_nucl += [next(codon_iter)]
+    out = Seq("".join(align_nucl), alphabet=Gapped(generic_dna))
+    if not out.ungap().translate().upper() == prot.ungap().upper():
+        raise MismatchedSeqsError("Aligned codons do not match input AAs")
+    return out
 
 def backalign_recs(nucl_recs, prot_index):
     for nucl_rec in nucl_recs:
