@@ -30,8 +30,12 @@ def clean(in_handle, out_handle):
     for cell in json_in.cells:
         if "outputs" in cell:
             cell.outputs = []
+        if "execution_count" in cell:
+            cell.execution_count = None
         if "prompt_number" in cell:
             cell.pop("prompt_number")
+        if "metadata" in cell:
+            cell.metadata = {}
 
     write(json_in, out_handle, NO_CONVERT)
 
