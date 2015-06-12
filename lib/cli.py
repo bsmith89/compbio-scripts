@@ -47,8 +47,6 @@ def get_base_parser():
                    type=argparse.FileType('w'),
                    metavar="OUTFILE", default=sys.stdout,
                    help=("write to file instead of stdout"))
-    h.add_argument("-d", "--drop", action="store_true",
-                   help="drop records which do not meet minimum requirements.")
     return p
 
 def get_seq_in_parser(optional=True):
@@ -80,6 +78,8 @@ def get_seq_out_parser():
                    choices=AVAIL_SEQ_FMTS,
                    help=("sequence file format of output"
                          " DEFAULT: {}").format(DEFAULT_SEQ_FMT))
+    g.add_argument("-d", "--drop", action="store_true",
+                   help="drop records which do not meet minimum requirements.")
     return p
 
 def get_align_in_parser(optional=False):
