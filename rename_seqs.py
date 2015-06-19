@@ -28,6 +28,10 @@ def get_map(handle):
     out = {}
     for line in handle:
         key, value = line.split()
+        key = key.strip()
+        value = value.strip()
+        if key in out:
+            raise RuntimeError("Key found twice in input file: {}".format(key))
         out[key.strip()] = value.strip()
     return out
 
