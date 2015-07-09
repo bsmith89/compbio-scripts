@@ -40,7 +40,7 @@ def clean(in_handle, out_handle):
     write(json_in, out_handle, NO_CONVERT)
 
 
-if __name__ == '__main__':
+def main():
     args = sys.argv[1:]
     if len(args) == 0:
         clean(sys.stdin, sys.stdout)
@@ -49,3 +49,6 @@ if __name__ == '__main__':
             clean(handle, sys.stdout)
     else:
         raise ValueError("Too many CL arguments passed to program.")
+
+if __name__ == '__main__':
+    main()
