@@ -22,7 +22,7 @@ setup(
                 'complement=sequtils.scripts.complement:main',
                 'drop_seqs=sequtils.scripts.drop_seqs:main',
                 'fetch_seqs=sequtils.scripts.fetch_seqs:main',
-                'ipynb_output_filter=sequtils.scripts.ipynb_output_filer:main',
+                'ipynb_output_filter=sequtils.scripts.ipynb_output_filter:main',
                 'ls_ids=sequtils.scripts.ls_ids:main',
                 'rename_seqs=sequtils.scripts.rename_seqs:main',
                 'translate=sequtils.scripts.translate:main',

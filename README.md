@@ -1,6 +1,6 @@
 A collection of useful scripts for computational biology.
 
-Intended to be used as a submodule of a computation biology project
+Intended to be used for computation biology projects
 (e.g. based on [this template](https://github.com/bsmith89/compbio-template)).
 
 Scripts should be well documented.
