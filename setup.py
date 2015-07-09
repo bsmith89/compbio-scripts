@@ -2,7 +2,7 @@
 
 """
 
-from setuptools import setup
+from setuptools import setup, find_packages
 
 setup(
         name="sequtils",
@@ -13,7 +13,7 @@ setup(
         author="Byron J. Smith",
         author_email="me@byronjsmith.com",
         license="MIT",
-        packages=["sequtils"],
+        packages=find_packages(),
         install_requires=["biopython", "ipython[notebook]"],
         entry_points={
             'console_scripts': [
