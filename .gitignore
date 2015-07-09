@@ -5,3 +5,5 @@
 *.html
 tags
 __pycache__/
+venv/
+*.egg-info/

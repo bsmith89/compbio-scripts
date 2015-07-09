@@ -1,21 +1,21 @@
 #!/usr/bin/env python3
-"""Translate nucleotide sequences to amino acids."""
+"""Reverse complement nucleotide sequences."""
 
 from Bio.SeqIO import parse, write
 import sys
 import argparse
 from copy import copy
-import lib.cli as cli
+from ..lib import cli
 import logging
 
 logger = logging.getLogger(__name__)
 logging.captureWarnings(True)
 
-def translate_recs(records):
-    """Translate sequence from records.
+def revcompl_recs(records):
+    """Reverse complement sequence from records.
 
     This geneator takes a iterable of Bio.SeqRecord objects and the same
-    records with sequences translated from nucleotides to amino acids.
+    records with sequences reverse transcribed.
 
     """
     for rec in records:
@@ -23,7 +23,7 @@ def translate_recs(records):
         # is safe.  Is rec.seq a mutable sequence?
         # No, right?
         rec = copy(rec)
-        rec.seq = rec.seq.translate()
+        rec.seq = rec.seq.reverse_complement()
         yield rec
 
 def parse_args(argv):
@@ -40,8 +40,8 @@ def main():
     logging.basicConfig(level=args.log_level)
     logger.debug(args)
 
-    for trans_rec in translate_recs(parse(args.in_handle, args.fmt_infile)):
-        write(trans_rec, args.out_handle, args.fmt_outfile)
+    for rc_rec in revcompl_recs(parse(args.in_handle, args.fmt_infile)):
+        write(rc_rec, args.out_handle, args.fmt_outfile)
 
 if __name__ == '__main__':
     main()

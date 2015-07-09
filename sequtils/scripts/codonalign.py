@@ -8,7 +8,7 @@ from Bio.Seq import Seq
 from Bio.Alphabet import generic_dna, generic_protein, Gapped
 import sys
 import argparse
-import lib.cli as cli
+from ..lib import cli
 from copy import copy
 import logging
 from warnings import warn

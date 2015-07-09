@@ -7,7 +7,7 @@ renamed.
 from Bio.SeqIO import parse, write
 import sys
 import argparse
-import lib.cli as cli
+from ..lib import cli
 import logging
 from copy import copy
 

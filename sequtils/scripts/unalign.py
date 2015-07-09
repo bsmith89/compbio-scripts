@@ -5,7 +5,7 @@ from Bio.SeqIO import parse, write
 import sys
 import argparse
 from copy import copy
-import lib.cli as cli
+from ..lib import cli
 import logging
 
 logger = logging.getLogger(__name__)
