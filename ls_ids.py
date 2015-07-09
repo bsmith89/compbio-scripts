@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Pull IDs from sequence files.
+"""List all of the sequence IDs in a (e.g. FASTA) file.
 
 """
 
