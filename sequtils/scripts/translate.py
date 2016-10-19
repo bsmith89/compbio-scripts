@@ -7,6 +7,7 @@ import argparse
 from copy import copy
 from ..lib import cli
 import logging
+from signal import signal, SIGPIPE, SIG_DFL
 
 logger = logging.getLogger(__name__)
 logging.captureWarnings(True)
@@ -43,6 +44,7 @@ def parse_args(argv):
     return args
 
 def main():
+    signal(SIGPIPE,SIG_DFL)
     args = parse_args(sys.argv)
     logging.basicConfig(level=args.log_level)
     logger.debug(args)
