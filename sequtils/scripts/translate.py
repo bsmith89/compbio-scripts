@@ -11,7 +11,9 @@ import logging
 logger = logging.getLogger(__name__)
 logging.captureWarnings(True)
 
-def translate_recs(records):
+DEFAULT_CODE = 1
+
+def translate_recs(records, code):
     """Translate sequence from records.
 
     This geneator takes a iterable of Bio.SeqRecord objects and the same
@@ -23,7 +25,7 @@ def translate_recs(records):
         # is safe.  Is rec.seq a mutable sequence?
         # No, right?
         rec = copy(rec)
-        rec.seq = rec.seq.translate()
+        rec.seq = rec.seq.translate(table=code)
         yield rec
 
 def parse_args(argv):
@@ -32,6 +34,11 @@ def parse_args(argv):
                                               cli.get_seq_out_parser(),
                                               cli.get_seq_in_parser(),
                                               ])
+    g = parser.add_argument_group(*cli.PAR_GROUP)
+    g.add_argument('--code', type=int,
+                   help=("NCBI translation table number "
+                         "DEFAULT: {}").format(DEFAULT_CODE),
+                   default=DEFAULT_CODE)
     args = parser.parse_args(argv[1:])
     return args
 
@@ -40,7 +47,7 @@ def main():
     logging.basicConfig(level=args.log_level)
     logger.debug(args)
 
-    for trans_rec in translate_recs(parse(args.in_handle, args.fmt_infile)):
+    for trans_rec in translate_recs(parse(args.in_handle, args.fmt_infile), code=args.code):
         write(trans_rec, args.out_handle, args.fmt_outfile)
 
 if __name__ == '__main__':
