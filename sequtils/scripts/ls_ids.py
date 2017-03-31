@@ -7,6 +7,7 @@ from Bio.SeqIO import parse
 import sys
 import argparse
 from ..lib import cli
+from signal import signal, SIGPIPE, SIG_DFL
 import logging
 
 logger = logging.getLogger(__name__)
@@ -34,4 +35,5 @@ def main():
         args.out_handle.write("{}\n".format(id))
 
 if __name__ == "__main__":
+    signal(SIGPIPE,SIG_DFL)
     main()
